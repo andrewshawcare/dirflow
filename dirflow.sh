@@ -16,7 +16,8 @@ set -o pipefail
 # Process a single directory
 dirflow() {
     local dir="${1:-.}"
-    local data="$(cat)"
+    local data=""
+    [ ! -t 0 ] && data=$(< /dev/stdin)
     
     # .sample - stochastic filtering at directory level
     if [ -f "$dir/.sample" ]; then
@@ -125,7 +126,7 @@ dirflow_parallel() {
         fi
         n=$((n+1))
         # Worker limit
-        [ "${workers:-0}" -gt 0 ] && [ $(jobs -r | wc -l) -ge "$workers" ] && wait
+        [ "${workers:-0}" -gt 0 ] && [ $(jobs -r | wc -l) -ge "${workers:-0}" ] && wait
     done
     
     wait  # Wait for all
