@@ -1,2 +1,2 @@
 type=while
-condition="read num && [ \$num -lt 100 ]"
+condition="read num && [ -n \"\$num\" ] && [ \"\$num\" -lt 100 ] 2>/dev/null"

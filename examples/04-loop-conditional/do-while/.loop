@@ -1,2 +1,2 @@
 type=do-while
-condition="read num && [ \$num -gt 0 ]"
+condition="read num && [ -n \"\$num\" ] && [ \"\$num\" -gt 0 ] 2>/dev/null"

@@ -1,3 +1,3 @@
-condition="[ \$(cat) -ge 0 ]"
+condition="input=\$(cat); [ -n \"\$input\" ] && [ \"\$input\" -ge 0 ] 2>/dev/null"
 on_true=positive/
 on_false=negative/

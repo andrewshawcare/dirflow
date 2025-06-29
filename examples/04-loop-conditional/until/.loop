@@ -1,2 +1,2 @@
 type=until
-condition="read num && [ \$num -ge 10 ]"
+condition="read num && [ -n \"\$num\" ] && [ \"\$num\" -ge 10 ] 2>/dev/null"
