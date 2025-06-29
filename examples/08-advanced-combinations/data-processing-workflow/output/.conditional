@@ -1,0 +1,3 @@
+condition="grep -q 'FOUND'"
+on_true=success/
+on_false=error/

@@ -1,0 +1,2 @@
+type=until
+condition="read num && [ \$num -ge 10 ]"

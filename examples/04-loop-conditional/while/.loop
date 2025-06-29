@@ -1,0 +1,2 @@
+type=while
+condition="read num && [ \$num -lt 100 ]"

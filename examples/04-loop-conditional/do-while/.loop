@@ -1,0 +1,2 @@
+type=do-while
+condition="read num && [ \$num -gt 0 ]"

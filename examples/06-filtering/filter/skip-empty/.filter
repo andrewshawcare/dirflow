@@ -1,0 +1,2 @@
+condition="[ -n \"\$(cat)\" ]"
+on_skip=identity
