@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Generate data in parallel with other processors
 input=$(cat)
