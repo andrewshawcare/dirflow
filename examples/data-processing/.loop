@@ -1,0 +1,2 @@
+type=while
+condition="[ $(cat) != '0' ]"
