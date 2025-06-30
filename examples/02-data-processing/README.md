@@ -19,7 +19,7 @@ This example demonstrates practical text processing using dirflow to clean, tran
 ## Usage
 ```bash
 # Process sample text
-echo -e "Hello World!\nThis is a test.\n\nHello again!" | ./dirflow.sh examples/02-data-processing
+echo -e 'Hello World!\nThis is a test.\n\nHello again!' | ./dirflow.sh examples/02-data-processing
 
 # Process a file
 cat textfile.txt | ./dirflow.sh examples/02-data-processing
