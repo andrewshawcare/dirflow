@@ -9,15 +9,53 @@
 #   .conditional - Branching based on condition (condition, on_true, on_false)
 #   .filter      - Skip processing if condition fails (condition, on_skip)
 #   .sample      - Random/systematic sampling (type, probability, count)
+#   .debug       - Debug logging (enabled, input_log, output_log)
 
 set -e
 set -o pipefail
+
+# Debug logging helper
+debug_log() {
+    local dir="$1" phase="$2" data="$3" filename="$4"
+    [ -f "$dir/.debug" ] || return 0
+    
+    . "$dir/.debug"
+    [ "${enabled:-false}" = "true" ] || return 0
+    
+    local timestamp="$(date '+%Y-%m-%d %H:%M:%S')"
+    local log_file=""
+    local location="$dir"
+    
+    # Use full path if filename is provided
+    [ -n "$filename" ] && location="$dir/$filename"
+    
+    case "$phase" in
+        input)  log_file="${input_log:-debug_input.log}" ;;
+        output) log_file="${output_log:-debug_output.log}" ;;
+        *) return 0 ;;
+    esac
+    
+    # Handle parallel execution with PID suffix
+    [ "${DIRFLOW_PARALLEL:-}" = "true" ] && log_file="${log_file%.log}.$$.log"
+    
+    # Use absolute path relative to the directory being processed
+    [ "${log_file:0:1}" != "/" ] && log_file="$dir/$log_file"
+    
+    # Safe logging - don't break pipeline on log failures
+    mkdir -p "$(dirname "$log_file")"
+    {
+        echo "[$timestamp] [$location] $phase: $data"
+    } >> "$log_file" 2>/dev/null || true
+}
 
 # Process a single directory
 dirflow() {
     local dir="${1:-.}"
     local data=""
     [ ! -t 0 ] && data=$(< /dev/stdin)
+    
+    # Debug input logging
+    debug_log "$dir" "input" "$data"
     
     # .sample - stochastic filtering at directory level
     if [ -f "$dir/.sample" ]; then
@@ -54,9 +92,12 @@ dirflow() {
             i=$((i+1))
             [ $i -ge 1000 ] && break  # Safety limit
         done
+        debug_log "$dir" "output" "$data"
         echo "$data"
     else
-        echo "$data" | dirflow_items "$dir"
+        data="$(echo "$data" | dirflow_items "$dir")"
+        debug_log "$dir" "output" "$data"
+        echo "$data"
     fi
 }
 
@@ -103,7 +144,9 @@ dirflow_items() {
             if [ -d "$dir/$item" ]; then
                 data="$(echo "$data" | dirflow "$dir/$item")"
             elif [ -x "$dir/$item" ]; then
+                debug_log "$dir" "input" "$data" "$item"
                 data="$(echo "$data" | "$dir/$item")"
+                debug_log "$dir" "output" "$data" "$item"
             fi
         done
         echo "$data"
@@ -119,11 +162,13 @@ dirflow_parallel() {
     trap "rm -rf $tmp" EXIT
     
     # Launch jobs
+    export DIRFLOW_PARALLEL=true
     for item in $items; do
         [ -L "$dir/$item" ] && continue
         if [ -d "$dir/$item" ]; then
             echo "$data" | dirflow "$dir/$item" > "$tmp/$n" &
         elif [ -x "$dir/$item" ]; then
+            debug_log "$dir" "input" "$data" "$item"
             echo "$data" | "$dir/$item" > "$tmp/$n" &
         else
             continue
@@ -132,16 +177,23 @@ dirflow_parallel() {
         # Worker limit
         [ "${workers:-0}" -gt 0 ] && [ $(jobs -r | wc -l) -ge "${workers:-0}" ] && wait
     done
+    unset DIRFLOW_PARALLEL
     
     wait  # Wait for all
     
     # Combine outputs
+    local output=""
     case "${combine:-concatenate}" in
-        first) cat "$tmp/0" 2>/dev/null ;;
-        last)  cat "$tmp/$((n-1))" 2>/dev/null ;;
-        merge) paste "$tmp"/* | tr '\t' '\n' ;;
-        *)     cat "$tmp"/* ;;
+        first) output="$(cat "$tmp/0" 2>/dev/null)" ;;
+        last)  output="$(cat "$tmp/$((n-1))" 2>/dev/null)" ;;
+        merge) output="$(paste "$tmp"/* | tr '\t' '\n')" ;;
+        *)     output="$(cat "$tmp"/*)" ;;
     esac
+    
+    export DIRFLOW_PARALLEL=true
+    debug_log "$dir" "output" "$output"
+    unset DIRFLOW_PARALLEL
+    echo "$output"
 }
 
 # Main

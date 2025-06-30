@@ -34,6 +34,7 @@ echo "Hello World!" | ./dirflow.sh examples/02-data-processing
 - **`.conditional`** - Branch to different directories based on conditions
 - **`.filter`** - Skip processing based on conditions  
 - **`.sample`** - Probabilistic or count-based sampling
+- **`.debug`** - Debug logging of input/output data
 
 Control files can be combined (e.g., `.loop` + `.parallel`).
 
@@ -78,5 +79,11 @@ Complex workflows combining multiple control structures:
 - **loop-parallel/**: 3 iterations with parallel processing each iteration
 - **data-processing-workflow/**: Multi-stage pipeline (sequential→parallel→conditional)
 - **iterative-refinement/**: Parallel refinement processes across iterations
+
+### 9. [Debug Control](examples/09-debugging/README.md)
+Debug logging for pipeline development and troubleshooting:
+- **Basic debugging**: Default log files for input/output tracking
+- **Advanced debugging**: Custom log file paths and directory structure
+- **Parallel-safe**: Unique log files for concurrent execution
 
 Each example includes working executable scripts, control files, and detailed README.md documentation with usage instructions and expected outputs.
