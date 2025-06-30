@@ -40,7 +40,7 @@ dirflow() {
         local i=0
         while : ; do
             # Store data to avoid consuming it during condition evaluation
-            temp_data="$data"
+            local temp_data="$data"
             
             case "${type:-}" in
                 for)     [ $i -ge "${count:-1}" ] && break ;;
