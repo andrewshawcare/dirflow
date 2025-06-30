@@ -39,14 +39,18 @@ dirflow() {
         . "$dir/.loop"
         local i=0
         while : ; do
+            # Store data to avoid consuming it during condition evaluation
+            temp_data="$data"
+            
             case "${type:-}" in
                 for)     [ $i -ge "${count:-1}" ] && break ;;
-                while)   echo "$data" | sh -c "$condition" || break ;;
-                until)   [ $i -gt 0 ] && echo "$data" | sh -c "$condition" && break ;;
-                do-while) [ $i -gt 0 ] && ! echo "$data" | sh -c "$condition" && break ;;
+                while)   echo "$temp_data" | sh -c "$condition" || break ;;
+                until)   [ $i -gt 0 ] && echo "$temp_data" | sh -c "$condition" && break ;;
+                do-while) [ $i -gt 0 ] && ! echo "$temp_data" | sh -c "$condition" && break ;;
                 *)       [ $i -gt 0 ] && break ;;
             esac
-            data="$(echo "$data" | dirflow_items "$dir")"
+            
+            data="$(echo "$temp_data" | dirflow_items "$dir")"
             i=$((i+1))
             [ $i -ge 1000 ] && break  # Safety limit
         done
