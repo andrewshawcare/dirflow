@@ -15,6 +15,18 @@ dirflow executes scripts sequentially or in parallel based on directory structur
 echo "input" | ./dirflow.sh examples/01-basic-pipeline
 ```
 
+## Quick Start
+
+```bash
+# Make dirflow executable
+chmod +x dirflow.sh
+
+# Try the examples
+./dirflow.sh examples/01-basic-pipeline
+echo "5" | ./dirflow.sh examples/01-basic-pipeline
+echo "Hello World!" | ./dirflow.sh examples/02-data-processing
+```
+
 ## Control Files
 
 - **`.loop`** - Iteration control (for/while/until/do-while)
@@ -68,15 +80,3 @@ Complex workflows combining multiple control structures:
 - **iterative-refinement/**: Parallel refinement processes across iterations
 
 Each example includes working executable scripts, control files, and detailed README.md documentation with usage instructions and expected outputs.
-
-## Quick Start
-
-```bash
-# Make dirflow executable
-chmod +x dirflow.sh
-
-# Try the examples
-./dirflow.sh examples/01-basic-pipeline
-echo "5" | ./dirflow.sh examples/01-basic-pipeline
-echo "Hello World!" | ./dirflow.sh examples/02-data-processing
-```
