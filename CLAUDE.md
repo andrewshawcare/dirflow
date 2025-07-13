@@ -11,9 +11,6 @@ dirflow is a directory-based pipeline executor where the filesystem structure de
 ## Key Commands
 
 ```bash
-# Make dirflow executable (required first step)
-chmod +x dirflow.sh
-
 # Basic execution
 ./dirflow.sh /path/to/directory
 
@@ -29,7 +26,7 @@ echo "Hello World!" | ./dirflow.sh examples/02-data-processing
 ## Architecture
 
 ### Core Script: dirflow.sh
-- Main entry point at `/Users/andrew/dirflow/dirflow.sh`
+- Main entry point at `dirflow.sh`
 - Bash script with strict error handling (`set -e`, `set -o pipefail`)
 - Traverses directories lexicographically, executing scripts and piping output
 - Built-in debug logging system with timestamp and location tracking
