@@ -1,3 +1,0 @@
-condition="input=\$(cat); [ \"\$input\" != \"\$(echo \"\$input\" | tr '[:upper:]' '[:lower:]')\" ]"
-on_true=uppercase/
-on_false=lowercase/

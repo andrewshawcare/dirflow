@@ -1,0 +1,3 @@
+condition="input=\$(cat); first_line=\$(echo \"\$input\" | head -n1); [ -n \"\$first_line\" ] && [ \"\$first_line\" -ge 0 ] 2>/dev/null"
+on_true=positive/
+on_false=negative/

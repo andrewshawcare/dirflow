@@ -1,0 +1,3 @@
+condition="input=\$(cat); first_line=\$(echo \"\$input\" | head -n1); [ \"\$first_line\" != \"\$(echo \"\$first_line\" | tr '[:upper:]' '[:lower:]')\" ]"
+on_true=uppercase/
+on_false=lowercase/
