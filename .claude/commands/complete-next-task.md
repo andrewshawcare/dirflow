@@ -25,7 +25,7 @@ The command will:
 2. **Copy plan template**: Copy `templates/plan/` contents into the selected task directory
 3. **Interactive planning**: Read task README.md and create customized PLAN.md through conversation
 4. **Execute TDD workflow**: 
-   - Create test scripts in `tests/` folder
+   - Create test scripts in top-level `tests/` folder with task name prefix
    - Follow red-green-refactor cycles
    - Run `tests/run-tests.sh` to verify progress
    - Mark checkboxes in PLAN.md as cycles complete
@@ -40,7 +40,7 @@ Uses dirflow's lexicographic ordering patterns:
 
 ## Test-Driven Development Workflow
 
-1. **Red**: Write a failing test in `tests/XX-test-name.sh`
+1. **Red**: Write a failing test in top-level `tests/XX-task-name-test-description.sh`
 2. **Green**: Implement minimal code to make the test pass
 3. **Refactor**: Improve the code while keeping tests passing
 4. **Verify**: Run `tests/run-tests.sh` to ensure all tests pass
@@ -51,11 +51,12 @@ Uses dirflow's lexicographic ordering patterns:
 ```
 tasks/XX-task-name/
 ├── README.md         # Original task definition
-├── PLAN.md          # Implementation plan with progress checkboxes
-└── tests/           # Test suite
-    ├── run-tests.sh  # Test runner (from template)
-    ├── 01-test-first-thing.sh
-    └── 02-test-second-thing.sh
+└── PLAN.md          # Implementation plan with progress checkboxes
+
+tests/               # Top-level test suite (persists after task completion)
+├── run-tests.sh     # Test runner 
+├── XX-task-name-01-test-first-thing.sh
+└── XX-task-name-02-test-second-thing.sh
 ```
 
 This ensures systematic, test-driven completion of all tasks with proper documentation and progress tracking.
