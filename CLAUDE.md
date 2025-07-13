@@ -67,7 +67,7 @@ examples/                  # 9 comprehensive example workflows
 
 ## Development Notes
 
-- No traditional build/test/lint commands - this is a bash utility
+- No traditional build/lint commands - this is a bash utility
 - All executable scripts use `#!/bin/bash` shebang
 - Examples serve as both documentation and functional tests
 - Debug logging supports parallel execution safety
@@ -75,14 +75,23 @@ examples/                  # 9 comprehensive example workflows
 
 ## Testing
 
-Run the examples to verify functionality:
 ```bash
-# Test basic pipeline
-./dirflow.sh examples/01-basic-pipeline
+# Run all tests
+tests/run-tests.sh
 
-# Test with various inputs
+# Run examples manually
+./dirflow.sh examples/01-basic-pipeline
 echo "test data" | ./dirflow.sh examples/02-data-processing
-echo "10" | ./dirflow.sh examples/03-loop-simple
 ```
 
-Each example directory contains a README.md with expected outputs for verification.
+Comprehensive test suite in `tests/` validates all examples. Each example directory contains a README.md with expected outputs.
+
+## Philosophy
+
+**Prefer simplicity over verbosity:**
+
+- Write the minimal code/documentation needed to solve the problem
+- Avoid redundant examples, explanations, or guidelines
+- One clear pattern is better than multiple examples
+- Code and documentation should be precise, not comprehensive
+- When adding guidelines or rules, state the single clear principle, not examples of what not to do

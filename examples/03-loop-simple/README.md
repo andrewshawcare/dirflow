@@ -20,7 +20,7 @@ This example demonstrates basic loop functionality using the `.loop` control fil
 
 Each iteration runs the entire pipeline (scripts 01-03), with output from one iteration becoming input to the next.
 
-## Usage
+## Examples
 ```bash
 # Run with default starting value (0)
 ./dirflow.sh examples/03-loop-simple

@@ -16,7 +16,7 @@ This example demonstrates the core functionality of dirflow: sequential executio
 2. **02-process.sh** - Squares each number 
 3. **03-format.sh** - Formats as a nice table
 
-## Usage
+## Examples
 ```bash
 # Run the pipeline
 ./dirflow.sh examples/01-basic-pipeline

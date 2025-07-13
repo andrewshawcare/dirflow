@@ -37,7 +37,7 @@ This example demonstrates stochastic processing using the `.sample` control file
 - Only processes if input has 3 or fewer lines
 - Demonstrates count-based sampling
 
-## Usage
+## Examples
 ```bash
 # Test random sampling (50% chance) - run multiple times
 for i in {1..5}; do 

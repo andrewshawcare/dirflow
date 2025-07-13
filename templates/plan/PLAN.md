@@ -24,3 +24,6 @@
 
 ## Notes
 {{IMPLEMENTATION_NOTES}}
+
+## Test Naming
+Test files should be named to describe what they test: `example-name.sh` or `functionality.sh`

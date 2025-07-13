@@ -46,7 +46,7 @@ This example demonstrates concurrent processing using the `.parallel` control fi
 - **Last**: Only uses output from last script (lexicographically)
 - Other scripts still run but output is discarded
 
-## Usage
+## Examples
 ```bash
 # Test concatenate strategy
 echo "data" | ./dirflow.sh examples/05-parallel-execution/concatenate

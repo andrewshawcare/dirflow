@@ -54,7 +54,7 @@ This example demonstrates complex workflows using multiple control structures to
 - Each iteration uses parallel refinement processes  
 - Shows combination of loops and parallel processing
 
-## Usage
+## Examples
 ```bash
 # Test loop + parallel combination
 echo "initial data" | ./dirflow.sh examples/08-advanced-combinations/loop-parallel

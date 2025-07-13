@@ -46,7 +46,7 @@ This example demonstrates conditional processing using `.filter` and `.condition
 - **number-workflow**: Self-contained workflow that generates positive numbers and routes them to squaring
 - **text-workflow**: Self-contained workflow that generates mixed-case text and routes based on case
 
-## Usage
+## Examples
 ```bash
 # Self-contained workflows (no external input needed)
 ./dirflow.sh examples/06-filtering/filter/valid-data

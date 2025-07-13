@@ -36,7 +36,7 @@ This example demonstrates advanced loop types that depend on conditions: `while`
 - Continues while number > 0
 - Decrements by 1 each iteration
 
-## Usage
+## Examples
 ```bash
 # Test while loop - doubles until >= 100
 echo "3" | ./dirflow.sh examples/04-loop-conditional/while

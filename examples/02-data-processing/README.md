@@ -18,7 +18,7 @@ This example demonstrates practical text processing using dirflow to clean, tran
 3. **03-normalize.sh** - Normalizes text by converting to lowercase and removes punctuation
 4. **04-count.sh** - Counts word frequency and sorts by most common
 
-## Usage
+## Examples
 ```bash
 # Self-contained execution with generated data
 ./dirflow.sh examples/02-data-processing
