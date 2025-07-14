@@ -86,6 +86,10 @@ echo "test data" | ./dirflow.sh examples/02-data-processing
 
 Comprehensive test suite in `tests/` validates all examples. Each example directory contains a README.md with expected outputs.
 
+## Communication Style
+
+Use technical tone: precise, factual, minimal embellishment. Prioritize accuracy and clarity over verbosity.
+
 ## Philosophy
 
 **Prefer simplicity over verbosity:**
