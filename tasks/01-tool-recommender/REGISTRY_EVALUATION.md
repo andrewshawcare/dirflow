@@ -38,16 +38,18 @@ The Smithery MCP Registry was selected as the primary registry for this implemen
 2. **Rich Metadata**: Each server includes detailed descriptions, verification status, and deployment information
 3. **REST API**: Clean, well-documented API with flexible querying capabilities
 4. **Verification System**: Deployed and verified servers ensure reliability
-5. **No Authentication Required**: Basic queries work without API keys
+5. **Authentication Available**: API key provides access to full registry features
 6. **Active Ecosystem**: Large, growing collection with real-world usage statistics
 
 ### API Implementation Details
 - **Endpoint**: `https://registry.smithery.ai/servers`
+- **Authentication**: API key required (set via SMITHERY_API_KEY environment variable)
 - **Query Parameters**: `q` (search), `page`, `pageSize`, filtering options
-- **Rate Limit**: Reasonable limits for public access
+- **Rate Limit**: Reasonable limits for authenticated access
 - **Data Format**: JSON responses with server metadata (qualifiedName, displayName, description, etc.)
-- **Cost**: Free for basic registry queries
+- **Cost**: Free tier available with API key
 - **Reliability**: Modern infrastructure with good uptime
+- **Security**: API key should be kept secure and not committed to version control
 
 ### Limitations and Considerations
 - Newer platform compared to GitHub-based alternatives

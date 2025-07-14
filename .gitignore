@@ -1,1 +1,6 @@
 *.log
+
+# API keys and sensitive information
+.env
+.env.local
+**/smithery-api-key.txt

@@ -6,7 +6,15 @@
 
 set -e
 
-SMITHERY_API_KEY="45079988-83e8-491c-bd50-96019cd73f81"
+# Get Smithery API key from environment variable
+SMITHERY_API_KEY="${SMITHERY_API_KEY:-}"
+
+if [ -z "$SMITHERY_API_KEY" ]; then
+    echo "ERROR: SMITHERY_API_KEY environment variable not set" >&2
+    echo "Please set your Smithery API key: export SMITHERY_API_KEY=your_key_here" >&2
+    echo "Get your API key at: https://smithery.ai/account/api-keys" >&2
+    exit 1
+fi
 
 # Store the input task for later use
 TASK_INPUT=$(cat)

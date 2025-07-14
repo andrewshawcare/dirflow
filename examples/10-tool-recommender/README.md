@@ -2,6 +2,17 @@
 
 This pipeline recommends MCP tools based on task descriptions provided via stdin.
 
+## Prerequisites
+
+You need a Smithery API key to use this pipeline:
+
+1. Create an account at https://smithery.ai/
+2. Get your API key at https://smithery.ai/account/api-keys
+3. Set the environment variable:
+   ```bash
+   export SMITHERY_API_KEY=your_api_key_here
+   ```
+
 ## Structure
 ```
 10-tool-recommender/
