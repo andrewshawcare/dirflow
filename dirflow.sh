@@ -132,7 +132,7 @@ dirflow_items() {
     
     # Get items (skip hidden files). Using find is more robust than parsing ls.
     local items
-    items=$(find "$dir" -maxdepth 1 -mindepth 1 -not -name '.*' -printf '%f\n' | sort)
+    items=$(find "$dir" -maxdepth 1 -mindepth 1 -not -name '.*' -exec basename {} \; | sort)
 
     [ -z "$items" ] && { echo "$data"; return; }
     
