@@ -204,7 +204,6 @@ dirflow_parallel() {
         *)     output="$(cat "$tmp_dir"/*)" ;;
     esac
 
-    export DIRFLOW_PARALLEL=true
     debug_log "$dir" "output" "$output"
     unset DIRFLOW_PARALLEL
     echo "$output"
