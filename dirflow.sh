@@ -130,25 +130,31 @@ dirflow_items() {
         return
     fi
     
-    # Get items (skip hidden)
-    local items="$(ls -a "$dir" | grep -v '^\.' | sort)"
+    # Get items (skip hidden files). Using find is more robust than parsing ls.
+    local items
+    items=$(find "$dir" -maxdepth 1 -mindepth 1 -not -name '.*' -printf '%f\n' | sort)
+
     [ -z "$items" ] && { echo "$data"; return; }
     
     # .parallel or sequential
     if [ -f "$dir/.parallel" ]; then
         . "$dir/.parallel"
+        # Pass items as a newline-separated string to the parallel handler
         dirflow_parallel "$dir" "$data" "$items"
     else
-        for item in $items; do
-            [ -L "$dir/$item" ] && continue
-            if [ -d "$dir/$item" ]; then
-                data="$(echo "$data" | dirflow "$dir/$item")"
-            elif [ -x "$dir/$item" ]; then
+        # Use a while-read loop with process substitution to avoid a subshell.
+        # This ensures that the 'data' variable is modified in the current shell.
+        while IFS= read -r item; do
+            local item_path="$dir/$item"
+            [ -L "$item_path" ] && continue
+            if [ -d "$item_path" ]; then
+                data="$(echo "$data" | dirflow "$item_path")"
+            elif [ -x "$item_path" ]; then
                 debug_log "$dir" "input" "$data" "$item"
-                data="$(echo "$data" | "$dir/$item")"
+                data="$(echo "$data" | "$item_path")"
                 debug_log "$dir" "output" "$data" "$item"
             fi
-        done
+        done < <(echo "$items")
         echo "$data"
     fi
 }
@@ -156,40 +162,48 @@ dirflow_items() {
 # Parallel execution
 dirflow_parallel() {
     local dir="$1" data="$2" items="$3"
-    local tmp="/tmp/dirflow.$$" n=0
-    
-    mkdir -p "$tmp"
-    trap "rm -rf $tmp" EXIT
-    
-    # Launch jobs
+    local tmp_dir n=0
+
+    # Securely create a temporary directory for parallel job outputs.
+    # Using mktemp is safer than creating a directory with a predictable name.
+    tmp_dir=$(mktemp -d)
+
+    # Ensure the temporary directory is removed when the script exits.
+    trap "rm -rf '$tmp_dir'" EXIT
+
+    # Launch jobs in parallel
     export DIRFLOW_PARALLEL=true
-    for item in $items; do
-        [ -L "$dir/$item" ] && continue
-        if [ -d "$dir/$item" ]; then
-            echo "$data" | dirflow "$dir/$item" > "$tmp/$n" &
-        elif [ -x "$dir/$item" ]; then
+    # Loop over newline-separated items to correctly handle filenames with spaces.
+    # Use process substitution to ensure the loop does not run in a subshell,
+    # so that the 'n' variable is correctly incremented in the current shell.
+    while IFS= read -r item; do
+        local item_path="$dir/$item"
+        [ -L "$item_path" ] && continue
+        if [ -d "$item_path" ]; then
+            echo "$data" | dirflow "$item_path" > "$tmp_dir/$n" &
+        elif [ -x "$item_path" ]; then
             debug_log "$dir" "input" "$data" "$item"
-            echo "$data" | "$dir/$item" > "$tmp/$n" &
+            echo "$data" | "$item_path" > "$tmp_dir/$n" &
         else
             continue
         fi
         n=$((n+1))
         # Worker limit
         [ "${workers:-0}" -gt 0 ] && [ $(jobs -r | wc -l) -ge "${workers:-0}" ] && wait
-    done
+    done < <(echo "$items")
     unset DIRFLOW_PARALLEL
-    
-    wait  # Wait for all
-    
-    # Combine outputs
+
+    wait # Wait for all background jobs to finish
+
+    # Combine outputs based on the specified strategy
     local output=""
     case "${combine:-concatenate}" in
-        first) output="$(cat "$tmp/0" 2>/dev/null)" ;;
-        last)  output="$(cat "$tmp/$((n-1))" 2>/dev/null)" ;;
-        merge) output="$(paste "$tmp"/* | tr '\t' '\n')" ;;
-        *)     output="$(cat "$tmp"/*)" ;;
+        first) output="$(cat "$tmp_dir/0" 2>/dev/null)" ;;
+        last)  output="$(cat "$tmp_dir/$((n-1))" 2>/dev/null)" ;;
+        merge) output="$(paste "$tmp_dir"/* | tr '\t' '\n')" ;;
+        *)     output="$(cat "$tmp_dir"/*)" ;;
     esac
-    
+
     export DIRFLOW_PARALLEL=true
     debug_log "$dir" "output" "$output"
     unset DIRFLOW_PARALLEL

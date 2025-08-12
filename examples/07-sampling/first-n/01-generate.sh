@@ -5,4 +5,5 @@ input=$(cat)
 echo "First-n sampling activated"
 echo "Input data:"
 echo "$input"
-echo "Line count: $(echo "$input" | wc -l)"
+line_count=$(echo "$input" | wc -l)
+printf "Line count:%9s\n" "$line_count"
