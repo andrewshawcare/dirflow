@@ -234,7 +234,7 @@ process_parallel() {
         first) output=$(cat "$tmp_dir/0" 2>/dev/null) ;;
         last)  output=$(cat "$tmp_dir/$((n-1))" 2>/dev/null) ;;
         merge) output=$(paste "$tmp_dir"/* | tr '\t' '\n') ;;
-        *)     for i in $(seq 0 $((n-1))); do cat "$tmp_dir/$i"; done ;;
+        *)     i=0; while [ $i -lt $n ]; do cat "$tmp_dir/$i"; i=$((i+1)); done ;;
     esac
 
     echo "$output"
